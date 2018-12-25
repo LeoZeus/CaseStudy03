@@ -1,6 +1,7 @@
 #include "lib.h"
 #include "comp.h"
 
+
 ipANDmask handle1(string buffer)
 {
 	ipANDmask tmp;
@@ -72,4 +73,13 @@ void writeFile(string output_string)
 
 
 	output.close();
+}
+
+
+void builtGraph(vector<vector <int>> graph, LIST *ls)
+{
+	for (int i = 0; i < graph.size(); ++i)
+		for (int j = 0; i < graph.size(); ++j)
+			if (ls->comp[i].isConnect(ls->comp[j]))
+				graph[i][j] = 1;
 }

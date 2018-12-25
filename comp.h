@@ -9,11 +9,6 @@ struct ipANDmask
 	vector<char> block;
 };
 
-struct LIST
-{
-	int size;
-	vector<COMP> comp;
-};
 
 class COMP
 {
@@ -31,3 +26,10 @@ public:
 		this->arr.push_back(data);
 	}
 };
+
+struct LIST
+{
+	int size;
+	vector<COMP> comp;
+};
+

@@ -17,14 +17,14 @@ class COMP
 private:
 	int  name;
 	int size;
-	vector<ipANDmask> arr;
+	vector<int32_t> arr;
 public:
-	void getSize(int size)
+	void setSize(int size)
 	{
 		this->size = size;
 	}
 
-	void getData(ipANDmask data)
+	void setData(int32_t data)
 	{
 		this->arr.push_back(data);
 	}

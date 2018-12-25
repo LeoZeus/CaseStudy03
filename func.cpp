@@ -2,19 +2,7 @@
 #include "comp.h"
 
 
-uint32_t convertBinary(ipANDmask x)
-{
-	uint32_t n = 0;
-
-	for (int i = 0; i < 3; ++i)
-		n = (n | x.block[i]) << 8;
-	n = n | x.block[3];
-
-	return n;
-
-}
-
-int32_t handle1(string buffer)
+ipANDmask handle1(string buffer)
 {
 	ipANDmask tmp;
 	int count = 0;
@@ -30,16 +18,19 @@ int32_t handle1(string buffer)
 			temp.clear();
 		}
 	}
-	return convertBinary(tmp);
+	return tmp;
 }
 
-int32_t handle(string buffer)
+ipANDmask handle(string buffer)
 {
 	int index = buffer.find(' ');
-	int32_t ip = handle1(string(buffer, index));
-	int32_t mask = handle1(string(buffer, index + 1, buffer.length()));
-	int32_t ret;
-	ret = ip & mask;
+	ipANDmask ip = handle1(string(buffer, index));
+	ipANDmask mask = handle1(string(buffer, index + 1, buffer.length()));
+	ipANDmask ret;
+	for (int i = 0; i < 4; ++i)
+	{
+		ret.block[i] = ip.block[i] & mask.block[i];
+	}
 	return ret;
 }
 
@@ -58,11 +49,11 @@ void readFile(string input_string, LIST* &list, int start, int end)
 		input >> buffer;
 		num = atoi(buffer.c_str());
 		list->comp.resize(i + 1);
-		list->comp[i].setSize(num);
+		list->comp[i].getSize(num);
 		for (int j = 0; j < num; ++j)
 		{
 			input >> buffer;
-			list->comp[i].setData(handle(buffer));
+			list->comp[i].getData(handle(buffer));
 		}
 	}
 
@@ -82,4 +73,13 @@ void writeFile(string output_string)
 
 
 	output.close();
+}
+
+
+void builtGraph(vector<vector <int>> graph, LIST *ls)
+{
+	for (int i = 0; i < graph.size(); ++i)
+		for (int j = 0; i < graph.size(); ++j)
+			if (ls->comp[i].isConnect(ls->comp[j]))
+				graph[i][j] = 1;
 }

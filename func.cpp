@@ -1,6 +1,7 @@
 #include "lib.h"
 #include "comp.h"
-
+#include <vector>
+#include <map>
 
 uint32_t convertBinary(ipANDmask x)
 {
@@ -43,7 +44,7 @@ int32_t handle(string buffer)
 	return ret;
 }
 
-void readFile(string input_string, LIST* &list, int start, int end)
+void readFile(string input_string, LIST* &list, int &start, int &end)
 {
 	ifstream input;
 	input.open(input_string);
@@ -74,11 +75,24 @@ void readFile(string input_string, LIST* &list, int start, int end)
 	input.close();
 }
 
-void writeFile(string output_string)
+void writeFile(string output_string, vector<int> loc, vector<int> distance, int start, int end)
 {
 	ofstream output;
 	output.open(output_string);
 
+	vector<int> kq;
+
+	if (distance[end] = INT_MAX) {
+		output << "Khong" << "\n";
+	}
+	else output << "Co" << "\n";
+
+	int i = end;
+	while (start[i] != -1)
+	{
+		kq.push_front(start[i]);
+		i = start[i];
+	}
 
 
 	output.close();
@@ -90,4 +104,35 @@ void builtGraph(vector<vector <int>> graph, LIST *ls)
 		for (int j = 0; i < graph.size(); ++j)
 			if (ls->comp[i].isConnect(ls->comp[j]))
 				graph[i][j] = 1;
+}
+
+// Dijkstra
+using std::vector;
+std::pair<vector<int>, vector<int>> dijkstra(std::vector<std::vector<int> > graph, int src) {
+	int n = graph.size();
+	vector<bool> mark(n, false);
+	vector<int> distance(n, INT_MAX);
+	vector<int> start(n, -1);
+	distance[src] = 0;
+	int u = 0;
+	int j = 0;
+	int minDis = 0;
+	for (int count = 1; count < n; ++count) {
+		for (j = 0, minDis = INT_MAX; j < n; ++j) {
+			if (!mark[j] && distance[j] < minDis) {
+				minDis = distance[j];
+				u = j;
+			}
+		}
+
+		mark[u] = true;
+		for (j = 0; j < n; ++j) {
+			if (distance[u] + graph[u][j] < distance[j]) {
+				distance[j] = distance[u] + graph[u][j];
+				start[j] = u;
+			}
+		}
+	}
+
+	return std::make_pair(distance, start);
 }
